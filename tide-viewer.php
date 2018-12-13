@@ -6,6 +6,13 @@
  * Also helpful in the event that NOAA changes their API
  */
 
+function authenticate() {
+    if (getenv("tide_viewer_api_key") != $_GET["tide_viewer_api_key"]) {
+        http_response_code(401);
+        die();
+    }
+}
+
 function get_product_data($station, $product) {
     $base_url = "https://tidesandcurrents.noaa.gov/api/datagetter";
     $date = "latest";
