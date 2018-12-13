@@ -7,13 +7,16 @@
  */
 
 function authenticate() {
-    if (! isset($_GET["tide_viewer_api_key"])) {
+    if (! isset($_GET["api_key"])) {
         http_response_code(401);
+        print "Auth derp!";
         die();
     }
-    print getenv("tide_viewer_api_key");
-    if (getenv("tide_viewer_api_key") != $_GET["tide_viewer_api_key"]) {
+    // __DIR__ via https://stackoverflow.com/questions/29798629/file-get-contents-with-relative-path/29798700#29798700
+    $api_key = trim(file_get_contents(__DIR__ . '/api_key'));
+    if ($api_key != $_GET["api_key"]) {
         http_response_code(401);
+        print "Wrong";
         die();
     }
 }
