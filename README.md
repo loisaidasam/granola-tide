@@ -6,7 +6,25 @@ Supporting software for ESP8266 Tide Viewer project
 
 Using LEDs and OLED screen, show current tide and water temp.
 
-## Components
+## Project design
+
+- 8 LEDs connected to digital GPIO pins of a NodeMCU (ESP8266) w/ 330Ω resistors
+
+LED Layout:
+
+```
+* > 10 ft
+* 10 ft
+* 8 ft
+* 6 ft
+* 4 ft
+* 2 ft
+* 0 ft
+* < 0 ft
+##### (OLED w/ timestamp/water level/water temp)
+```
+
+## Software
 
 - `tide-viewer` - bash script for analyzing potential data
 
