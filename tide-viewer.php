@@ -7,6 +7,11 @@
  */
 
 function authenticate() {
+    if (! isset($_GET["tide_viewer_api_key"])) {
+        http_response_code(401);
+        die();
+    }
+    print getenv("tide_viewer_api_key");
     if (getenv("tide_viewer_api_key") != $_GET["tide_viewer_api_key"]) {
         http_response_code(401);
         die();
