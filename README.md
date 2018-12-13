@@ -26,7 +26,12 @@ LED Layout:
 
 ## Software
 
-- `tide-viewer` - bash script for analyzing potential data
+- [tide-viewer](https://github.com/loisaidasam/tide-viewer/blob/master/tide-viewer)
+  - bash script for analyzing potential data
+- [tide-viewer.php](https://github.com/loisaidasam/tide-viewer/blob/master/tide-viewer.php)
+  - PHP web proxy helper functions
+- [public/portland/index.php](https://github.com/loisaidasam/tide-viewer/blob/master/public/portland/index.php)
+  - PHP web proxy for Portland, ME station
 
 ## References:
 
