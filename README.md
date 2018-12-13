@@ -1,6 +1,6 @@
-# tide-viewer
+# granola-tide
 
-Supporting software for ESP8266 Tide Viewer project
+Supporting software for ESP8266 Granola Tide project
 
 ## Project overview
 
@@ -13,24 +13,23 @@ Using LEDs and OLED screen, show current tide and water temp.
 LED Layout:
 
 ```
-* > 10 ft
-* 10 ft
+* >= 10 ft
 * 8 ft
 * 6 ft
 * 4 ft
 * 2 ft
-* 0 ft
-* < 0 ft
+* <= 0 ft
 ##### (OLED w/ timestamp/water level/water temp)
+* power * recent
 ```
 
 ## Software
 
-- [tide-viewer](https://github.com/loisaidasam/tide-viewer/blob/master/tide-viewer)
+- [tide-viewer](https://github.com/loisaidasam/granola-tide/blob/master/tide-viewer)
   - bash script for analyzing potential data
-- [tide-viewer.php](https://github.com/loisaidasam/tide-viewer/blob/master/tide-viewer.php)
+- [tide-viewer.php](https://github.com/loisaidasam/granola-tide/blob/master/tide-viewer.php)
   - PHP web proxy helper functions
-- [public/portland/index.php](https://github.com/loisaidasam/tide-viewer/blob/master/public/portland/index.php)
+- [public/portland/index.php](https://github.com/loisaidasam/granola-tide/blob/master/public/portland/index.php)
   - PHP web proxy for Portland, ME station
 
 ## References:
