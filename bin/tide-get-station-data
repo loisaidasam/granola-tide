@@ -24,13 +24,12 @@ fi
 
 # Water level
 data=$("$script_path/tide-get-data" "$station" "water_level");
-timestamp1=$(echo "$data" | jq '.t');
-water_level=$(echo "$data" | jq '.v');
+timestamp1=$(echo "$data" | jq -r '.t');
+water_level=$(echo "$data" | jq -r '.v');
 
 # Temperature
 data=$("$script_path/tide-get-data" "$station" "water_temperature");
-timestamp2=$(echo "$data" | jq '.t');
-water_temperature=$(echo "$data" | jq '.v');
+timestamp2=$(echo "$data" | jq -r '.t');
+water_temperature=$(echo "$data" | jq -r '.v');
 
-output="{\"timestamp1\": $timestamp1, \"water_level\": $water_level, \"timestamp2\": $timestamp2, \"water_temperature\": $water_temperature}";
-echo $output | jq '.';
+echo "$timestamp1,$water_level,$timestamp2,$water_temperature"
