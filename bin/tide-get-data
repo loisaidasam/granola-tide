@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Data via https://tidesandcurrents.noaa.gov/api/
+
+
+usage ()
+{
+    echo "tide-get-data <station> <product>" >&2;
+    exit 1;
+}
+
+base_url="https://tidesandcurrents.noaa.gov/api/datagetter"
+date="latest"
+datum="mllw"
+units="english"
+# time_zone="lst"
+time_zone="lst_ldt"
+# format="csv"
+format="json"
+
+version="0.2"
+application="granola-tide-v$version"
+
+station="$1"
+if [ -z "$station" ]
+then
+    usage;
+fi
+
+product="$2"
+if [ -z "$product" ]
+then
+    usage;
+fi
+
+url="$base_url?date=$date&station=$station&product=$product&datum=$datum&units=$units&time_zone=$time_zone&format=$format&application=$application"
+# echo "$url" >&2
+curl -Ss "$url" | jq '.data[0]'
