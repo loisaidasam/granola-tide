@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Update MQTT with station data
+
+data="$1"
+if [ -z "$data" ]
+then
+    echo "Missing data" >&2;
+    exit 1;
+fi
+
+if [ -z "$tide_mqtt_host" ]
+then
+    echo "Missing tide_mqtt_host" >&2;
+    exit 1;
+fi
+
+if [ -z "$tide_mqtt_port" ]
+then
+    echo "Missing tide_mqtt_port" >&2;
+    exit 1;
+fi
+
+if [ -z "$tide_mqtt_topic" ]
+then
+    echo "Missing tide_mqtt_topic" >&2;
+    exit 1;
+fi
+
+mosquitto_pub -h "$tide_mqtt_host" -p "$tide_mqtt_port" -t "$tide_mqtt_topic" -m "$data" --retain;
