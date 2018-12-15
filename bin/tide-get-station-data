@@ -16,7 +16,7 @@ popd  > /dev/null
 tide_station_portland="8418150"
 
 station="$tide_station_portland"
-station_name="Portland Maine"
+station_name="Portland, Maine"
 
 # TODO: Accept station parameter
 # station="$1"
@@ -36,4 +36,4 @@ data=$("$script_path/tide-get-data" "$station" "water_temperature");
 timestamp2=$(echo "$data" | jq -r '.t');
 water_temperature=$(echo "$data" | jq -r '.v');
 
-echo "$station_name,$timestamp1,$water_level,$timestamp2,$water_temperature"
+echo "$station_name|$timestamp1|$water_level|$timestamp2|$water_temperature"
