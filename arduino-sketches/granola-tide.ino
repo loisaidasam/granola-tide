@@ -32,6 +32,12 @@
 // Use builtin for NodeMCU ESP8266
 #define OLED_RESET     LED_BUILTIN
 
+// Other OLED connection notes:
+// GND -> GND
+// VCC -> 3V3
+// SCL -> D1
+// SDA -> D2
+
 #define BAUD_RATE 115200
 
 // LEDs
