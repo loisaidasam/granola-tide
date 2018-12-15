@@ -55,6 +55,8 @@
 #define MQTT_PORT 8883
 #define MQTT_TOPIC "mqtt/topic/here"
 
+#define LOCATION "Portland Maine"
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -274,6 +276,11 @@ void update_oled() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.println(timestamp1);
+
+  display.setCursor(0, 9);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.println(F(LOCATION));
   
   display.setCursor(0, 25);
   display.setTextSize(3);
