@@ -35,5 +35,7 @@ then
 fi
 
 url="$base_url?date=$date&station=$station&product=$product&datum=$datum&units=$units&time_zone=$time_zone&format=$format&application=$application"
+
 # echo "$url" >&2
+
 curl -Ss "$url" | jq '.data[0]'
