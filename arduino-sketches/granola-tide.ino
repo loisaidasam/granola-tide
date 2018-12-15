@@ -32,23 +32,22 @@
 // Use builtin for NodeMCU ESP8266
 #define OLED_RESET     LED_BUILTIN
 
-#define baud_rate 115200
+#define BAUD_RATE 115200
 
 // LEDs
-#define led_0 D0
-#define led_2 D3
-#define led_4 D5
-#define led_6 D6
-#define led_8 D7
-#define led_10 D8
+#define LED_0 D0
+#define LED_2 D3
+#define LED_4 D5
+#define LED_6 D6
+#define LED_8 D7
+#define LED_10 D8
 
-#define wifi_ssid "SSID"
-#define wifi_password "PASSWORD"
+#define WIFI_SSID "SSID"
+#define WIFI_PASSWORD "PASSWORD"
 
-#define mqtt_server "MQTT HOST"
-#define mqtt_port 8883
-#define mqtt_topic "mqtt/topic/here"
-
+#define MQTT_SERVER "MQTT HOST"
+#define MQTT_PORT 8883
+#define MQTT_TOPIC "mqtt/topic/here"
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -64,7 +63,7 @@ int water_temperature_int;
 
 void setup() {
   delay(10);
-  Serial.begin(baud_rate);
+  Serial.begin(BAUD_RATE);
   setup_oled();
   initialize_oled();
   setup_gpio();
@@ -75,7 +74,8 @@ void setup() {
 void setup_oled() {
   if (! display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    // Don't proceed, loop forever
+    for(;;);
   }
 }
 
@@ -101,27 +101,27 @@ void initialize_oled() {
 void setup_gpio() {
   pinMode(LED_BUILTIN, OUTPUT);
 
-  pinMode(led_0, OUTPUT);
-  pinMode(led_2, OUTPUT);
-  pinMode(led_4, OUTPUT);
-  pinMode(led_6, OUTPUT);
-  pinMode(led_8, OUTPUT);
-  pinMode(led_10, OUTPUT);
+  pinMode(LED_0, OUTPUT);
+  pinMode(LED_2, OUTPUT);
+  pinMode(LED_4, OUTPUT);
+  pinMode(LED_6, OUTPUT);
+  pinMode(LED_8, OUTPUT);
+  pinMode(LED_10, OUTPUT);
   
-  digitalWrite(led_0, LOW);
-  digitalWrite(led_2, LOW);
-  digitalWrite(led_4, LOW);
-  digitalWrite(led_6, LOW);
-  digitalWrite(led_8, LOW);
-  digitalWrite(led_10, LOW);
+  digitalWrite(LED_0, LOW);
+  digitalWrite(LED_2, LOW);
+  digitalWrite(LED_4, LOW);
+  digitalWrite(LED_6, LOW);
+  digitalWrite(LED_8, LOW);
+  digitalWrite(LED_10, LOW);
 }
 
 void setup_wifi() {
   Serial.println();
   Serial.print("Connecting to ");
-  Serial.println(wifi_ssid);
+  Serial.println(WIFI_SSID);
 
-  WiFi.begin(wifi_ssid, wifi_password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -135,7 +135,7 @@ void setup_wifi() {
 }
 
 void setup_mqtt() {
-  client.setServer(mqtt_server, mqtt_port);
+  client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback);
 }
 
@@ -148,7 +148,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     payload_str += (char)payload[i];
   }
   Serial.println(payload_str);
-  if (strcmp(topic, mqtt_topic) != 0) {
+  if (strcmp(topic, MQTT_TOPIC) != 0) {
     Serial.print("Unknown topic");
     return;
   }
@@ -233,22 +233,22 @@ int get_max_water_level_led() {
 void update_led(int led, int value) {
   switch(led) {
     case 0:
-      digitalWrite(led_0, value);
+      digitalWrite(LED_0, value);
       return;
     case 2:
-      digitalWrite(led_2, value);
+      digitalWrite(LED_2, value);
       return;
     case 4:
-      digitalWrite(led_4, value);
+      digitalWrite(LED_4, value);
       return;
     case 6:
-      digitalWrite(led_6, value);
+      digitalWrite(LED_6, value);
       return;
     case 8:
-      digitalWrite(led_8, value);
+      digitalWrite(LED_8, value);
       return;
     case 10:
-      digitalWrite(led_10, value);
+      digitalWrite(LED_10, value);
       return;
     default:
       Serial.print("Unknown led in update_led(): ");
@@ -304,7 +304,7 @@ void reconnect() {
     // Attempt to connect
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
-      client.subscribe(mqtt_topic);
+      client.subscribe(MQTT_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
