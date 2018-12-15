@@ -11,11 +11,14 @@
 // MQTT
 #include <PubSubClient.h>
 
-// OLED setup:
+// OLED
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+
+// For rounding
+#include <math.h>
 
 // OLED display width, in pixels
 #define SCREEN_WIDTH 128
@@ -46,16 +49,18 @@
 #define mqtt_port 8883
 #define mqtt_topic "mqtt/topic/here"
 
-// Define the display
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+// Define the display
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 String payload_str, payload_str_last;
 
 String timestamp1, timestamp2;
 float water_level, water_temperature;
+int water_temperature_int;
 
 void setup() {
   delay(10);
@@ -74,39 +79,15 @@ void setup_oled() {
   }
 }
 
+/**
+ * Notes about F() function:
+ *
+ * http://forum.arduino.cc/index.php?topic=91314.0
+ * http://forum.arduino.cc/index.php?topic=91314.msg685761#msg685761
+ * 
+ * Has something to do with referencing "data" space vs. "code" space
+ */
 void initialize_oled() {
-//  display.clearDisplay();
-
-//  // Normal 1:1 pixel scale
-//  display.setTextSize(1);
-//  // Draw white text
-//  display.setTextColor(WHITE);
-//  // Start at top-left corner
-//  display.setCursor(0,0);
-//  display.println(F("Hello, world!"));
-//
-//  // Draw 'inverse' text
-//  display.setTextColor(BLACK, WHITE);
-//  display.println(3.141592);
-//
-//  // Draw 2X-scale text
-//  display.setTextSize(2);
-//  display.setTextColor(WHITE);
-//  display.print(F("0x"));
-//  display.println(0xDEADBEEF, HEX);
-
-//  for (int i = 0; i < 5; i++) {
-//    for (int j = 0; j < 50; j++) {
-//      display.clearDisplay();
-//      display.setCursor(0, j);
-//      display.setTextSize(2);
-//      display.setTextColor(WHITE);
-//      display.println(F("Loading..."));
-//      display.display();
-//      delay(300);
-//    }
-//  }
-
   display.clearDisplay();
 
   display.setCursor(0, 25);
@@ -119,13 +100,20 @@ void initialize_oled() {
 
 void setup_gpio() {
   pinMode(LED_BUILTIN, OUTPUT);
-//  TODO:
-//  pinMode(led_red, OUTPUT);
-//  pinMode(led_yellow, OUTPUT);
-//  pinMode(led_green, OUTPUT);
-//  digitalWrite(led_red, LOW);
-//  digitalWrite(led_yellow, LOW);
-//  digitalWrite(led_green, LOW);
+
+  pinMode(led_0, OUTPUT);
+  pinMode(led_2, OUTPUT);
+  pinMode(led_4, OUTPUT);
+  pinMode(led_6, OUTPUT);
+  pinMode(led_8, OUTPUT);
+  pinMode(led_10, OUTPUT);
+  
+  digitalWrite(led_0, LOW);
+  digitalWrite(led_2, LOW);
+  digitalWrite(led_4, LOW);
+  digitalWrite(led_6, LOW);
+  digitalWrite(led_8, LOW);
+  digitalWrite(led_10, LOW);
 }
 
 void setup_wifi() {
@@ -175,6 +163,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   payload_str_last = payload_str;
 }
 
+/**
+ * Sample payload:
+ *
+ * "2018-12-14 22:18,1.016,2018-12-14 22:18,40.6"
+ */
 void parse_payload(String payload) {
   int i = 0;
   String buffer;
@@ -187,6 +180,7 @@ void parse_payload(String payload) {
   i += timestamp2.length() + 1;
   buffer = parse_next_piece(payload, i);
   water_temperature = buffer.toFloat();
+  water_temperature_int = (int) round(water_temperature);
 }
 
 String parse_next_piece(String payload, int i) {
@@ -213,6 +207,8 @@ void printCurrentData() {
 
 void update_leds() {
   int max_led = get_max_water_level_led();
+  Serial.print("max_led=");
+  Serial.println(max_led);
   for (int led = 10; led >= 0; led -= 2) {
     int value = led <= max_led ? HIGH : LOW;
     update_led(led, value);
@@ -260,9 +256,36 @@ void update_led(int led, int value) {
   }
 }
 
-// TODO:
+/**
+ * Characters at size 1 are 5x8 pixels
+ * 
+ * https://cdn-learn.adafruit.com/downloads/pdf/adafruit-gfx-graphics-library.pdf
+ */
 void update_oled() {
+  display.clearDisplay();
+
+  display.setCursor(0, 0);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.println(timestamp1);
   
+  display.setCursor(0, 25);
+  display.setTextSize(3);
+  display.setTextColor(WHITE);
+  display.print(water_temperature_int);
+  // char 247 is the degrees symbol
+  // via https://forum.arduino.cc/index.php?topic=170670.msg2389431#msg2389431
+  display.print((char)247);
+  display.println(F("F"));
+
+  display.setCursor(0, 56);
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.print(F("Tide: "));
+  display.print(water_level);
+  display.println(F(" ft."));
+
+  display.display();
 }
 
 void loop() {
