@@ -5,6 +5,9 @@
  * as provided by NOAA
  */
 
+// For rounding
+#include <math.h>
+
 // Wifi
 #include <ESP8266WiFi.h>
 
@@ -16,9 +19,6 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-
-// For rounding
-#include <math.h>
 
 // OLED display width, in pixels
 #define SCREEN_WIDTH 128
