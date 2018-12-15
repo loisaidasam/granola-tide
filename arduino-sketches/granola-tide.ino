@@ -80,6 +80,7 @@ void setup() {
 }
 
 void setup_oled() {
+  // "0x3C" is written on back of OLED
   if (! display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
     // Don't proceed, loop forever
