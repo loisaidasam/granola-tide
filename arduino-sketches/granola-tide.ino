@@ -5,18 +5,39 @@
  * as provided by NOAA
  */
 
+// Wifi
 #include <ESP8266WiFi.h>
+
+// MQTT
 #include <PubSubClient.h>
+
+// OLED setup:
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+// OLED display width, in pixels
+#define SCREEN_WIDTH 128
+// OLED display height, in pixels
+#define SCREEN_HEIGHT 64
+//#define SCREEN_HEIGHT 32
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+// Reset pin # (or -1 if sharing Arduino reset pin)
+//#define OLED_RESET     4
+// Use builtin for NodeMCU ESP8266
+#define OLED_RESET     LED_BUILTIN
 
 #define baud_rate 115200
 
-// TODO: Define LEDs
-#define led_0 D1
-#define led_2 D1
-#define led_4 D1
-#define led_6 D1
-#define led_8 D1
-#define led_10 D1
+// LEDs
+#define led_0 D0
+#define led_2 D3
+#define led_4 D5
+#define led_6 D6
+#define led_8 D7
+#define led_10 D8
 
 #define wifi_ssid "SSID"
 #define wifi_password "PASSWORD"
@@ -24,6 +45,9 @@
 #define mqtt_server "MQTT HOST"
 #define mqtt_port 8883
 #define mqtt_topic "mqtt/topic/here"
+
+// Define the display
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -36,9 +60,61 @@ float water_level, water_temperature;
 void setup() {
   delay(10);
   Serial.begin(baud_rate);
+  setup_oled();
+  initialize_oled();
   setup_gpio();
   setup_wifi();
   setup_mqtt();
+}
+
+void setup_oled() {
+  if (! display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+}
+
+void initialize_oled() {
+//  display.clearDisplay();
+
+//  // Normal 1:1 pixel scale
+//  display.setTextSize(1);
+//  // Draw white text
+//  display.setTextColor(WHITE);
+//  // Start at top-left corner
+//  display.setCursor(0,0);
+//  display.println(F("Hello, world!"));
+//
+//  // Draw 'inverse' text
+//  display.setTextColor(BLACK, WHITE);
+//  display.println(3.141592);
+//
+//  // Draw 2X-scale text
+//  display.setTextSize(2);
+//  display.setTextColor(WHITE);
+//  display.print(F("0x"));
+//  display.println(0xDEADBEEF, HEX);
+
+//  for (int i = 0; i < 5; i++) {
+//    for (int j = 0; j < 50; j++) {
+//      display.clearDisplay();
+//      display.setCursor(0, j);
+//      display.setTextSize(2);
+//      display.setTextColor(WHITE);
+//      display.println(F("Loading..."));
+//      display.display();
+//      delay(300);
+//    }
+//  }
+
+  display.clearDisplay();
+
+  display.setCursor(0, 25);
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.println(F("Loading..."));
+
+  display.display();
 }
 
 void setup_gpio() {
