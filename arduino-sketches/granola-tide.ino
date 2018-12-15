@@ -41,12 +41,12 @@
 #define BAUD_RATE 115200
 
 // LEDs
-#define LED_0 D0
-#define LED_2 D3
-#define LED_4 D5
-#define LED_6 D6
-#define LED_8 D7
-#define LED_10 D8
+#define LED_0 D7
+#define LED_2 D6
+#define LED_4 D8
+#define LED_6 D5
+#define LED_8 D3
+#define LED_10 D0
 
 #define WIFI_SSID "SSID"
 #define WIFI_PASSWORD "PASSWORD"
