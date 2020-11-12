@@ -2,7 +2,7 @@
 
 # Data via https://tidesandcurrents.noaa.gov/api/
 
-base_url="https://tidesandcurrents.noaa.gov/api/datagetter"
+base_url="https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
 date="latest"
 datum="mllw"
 units="english"
